@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Dumbbell, Target, Clock, BarChart3, X, Play, CheckCircle, StopCircle, TimerReset, Plus, Folder, FolderPlus, List, Calendar, ArrowLeft, ChevronDown } from 'lucide-react';
+import { Dumbbell, Target, Clock, BarChart3, X, Play, CheckCircle, StopCircle, TimerReset, Plus, Folder, FolderPlus, List, Calendar, ArrowLeft, ChevronDown, Youtube } from 'lucide-react';
 
 // Define types
 interface Exercise {
@@ -17,6 +17,7 @@ interface Exercise {
   restTime: string;
   equipment: string;
   targetMuscles: string[];
+  videoId?: string; // Add optional videoId field
 }
 
 interface Routine {
@@ -61,6 +62,8 @@ const Exercises = () => {
   });
   const [isRoutineListVisible, setIsRoutineListVisible] = useState(false);
   const [viewingRoutine, setViewingRoutine] = useState<Routine | null>(null);
+  const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
+  const [currentVideoId, setCurrentVideoId] = useState('');
 
   // Reset visible exercises when category changes
   useEffect(() => {
@@ -719,6 +722,36 @@ const Exercises = () => {
     setIsWorkoutStarted(false);
   };
 
+  // Function to open video demo modal
+  const openVideoModal = (exercise: Exercise) => {
+    // Default video if exercise doesn't have a specific one
+    const videoId = exercise.videoId || getDefaultVideoId(exercise.category);
+    setCurrentVideoId(videoId);
+    setIsVideoModalOpen(true);
+  };
+
+  // Function to close video modal
+  const closeVideoModal = () => {
+    setIsVideoModalOpen(false);
+    setCurrentVideoId('');
+  };
+
+  // Get default video ID based on exercise category
+  const getDefaultVideoId = (category: string): string => {
+    // Map of category to default video IDs
+    const categoryVideos: Record<string, string> = {
+      'Chest': 'IODxDxX7oi4',
+      'Back': 'eE7dzM0iexc',
+      'Legs': 'Xvw0SzVCO-U',
+      'Arms': 'ECUbq7xZZVU', 
+      'Shoulders': 'oLMSV2-BeGo',
+      'Core': 'DHD1-2PKbhU',
+      'Cardio': '7HRqB30lf-8'
+    };
+    
+    return categoryVideos[category] || 'UBMk30rjy0o'; // Default video if category not found
+  };
+
   return (
     <section id="exercises" className="py-20 bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -1052,6 +1085,15 @@ const Exercises = () => {
                     </div>
                   </div>
 
+                  {/* Watch Demo Button */}
+                  <button
+                    onClick={() => openVideoModal(selectedExercise)}
+                    className="w-full bg-blue-600 text-white py-3 rounded-xl font-medium hover:bg-blue-700 transition-all flex items-center justify-center gap-2 mb-6"
+                  >
+                    <Youtube className="h-5 w-5" />
+                    Watch Demo
+                  </button>
+
                   {/* Target Muscles */}
                   <div className="mb-6">
                     <h4 className="text-lg font-bold text-gray-900 mb-3">Target Muscles</h4>
@@ -1117,6 +1159,38 @@ const Exercises = () => {
                   Close
                 </button>
               </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Video Demo Modal */}
+      {isVideoModalOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 p-4">
+          <div className="relative w-full max-w-4xl bg-black rounded-xl shadow-2xl overflow-hidden">
+            {/* Close Button */}
+            <button 
+              onClick={closeVideoModal} 
+              className="absolute top-4 right-4 bg-white/20 backdrop-blur-sm text-white p-2 rounded-full hover:bg-white/30 transition-colors z-10"
+            >
+              <X className="h-6 w-6" />
+            </button>
+            
+            {/* Video Player */}
+            <div className="relative pb-[56.25%] h-0 overflow-hidden">
+              <iframe
+                className="absolute top-0 left-0 w-full h-full"
+                src={`https://www.youtube.com/embed/${currentVideoId}?autoplay=1&mute=0`}
+                title="Exercise Demonstration"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+              ></iframe>
+            </div>
+            
+            {/* Video Title */}
+            <div className="p-6 bg-gradient-to-t from-black/100 to-black/80">
+              <h3 className="text-xl font-bold text-white">Exercise Demonstration</h3>
+              <p className="text-gray-300 mt-2">Watch how to perform this exercise with proper form and technique.</p>
             </div>
           </div>
         </div>

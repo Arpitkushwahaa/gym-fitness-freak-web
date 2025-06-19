@@ -1,12 +1,28 @@
-import React from 'react';
-import { Play, Star, Users, Target } from 'lucide-react';
+import React, { useState } from 'react';
+import { Play, Star, Users, Target, X } from 'lucide-react';
 
 const Hero = () => {
+  // Add state for video modal
+  const [showVideoModal, setShowVideoModal] = useState(false);
+  
+  // YouTube video ID for a fitness demo video
+  const demoVideoId = "UBMk30rjy0o";
+
   const stats = [
     { icon: Users, value: '10K+', label: 'Active Members' },
     { icon: Target, value: '95%', label: 'Success Rate' },
     { icon: Star, value: '4.9', label: 'Rating' }
   ];
+
+  // Open video modal
+  const openVideoModal = () => {
+    setShowVideoModal(true);
+  };
+
+  // Close video modal
+  const closeVideoModal = () => {
+    setShowVideoModal(false);
+  };
 
   return (
     <section id="home" className="relative min-h-screen flex items-center justify-center overflow-hidden">
@@ -45,7 +61,10 @@ const Hero = () => {
               Start Your Journey
               <Target className="h-5 w-5" />
             </a>
-            <button className="bg-white/10 backdrop-blur-sm text-white px-8 py-4 rounded-full text-lg font-semibold hover:bg-white/20 transition-all duration-300 flex items-center gap-2 border border-white/20">
+            <button 
+              onClick={openVideoModal} 
+              className="bg-white/10 backdrop-blur-sm text-white px-8 py-4 rounded-full text-lg font-semibold hover:bg-white/20 transition-all duration-300 flex items-center gap-2 border border-white/20"
+            >
               <Play className="h-5 w-5" />
               Watch Demo
             </button>
@@ -72,6 +91,38 @@ const Hero = () => {
           <div className="w-1 h-3 bg-white/60 rounded-full mt-2 animate-bounce"></div>
         </div>
       </div>
+
+      {/* Video Modal */}
+      {showVideoModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 p-4">
+          <div className="relative w-full max-w-4xl bg-black rounded-xl shadow-2xl overflow-hidden">
+            {/* Close Button */}
+            <button 
+              onClick={closeVideoModal} 
+              className="absolute top-4 right-4 bg-white/20 backdrop-blur-sm text-white p-2 rounded-full hover:bg-white/30 transition-colors z-10"
+            >
+              <X className="h-6 w-6" />
+            </button>
+            
+            {/* Video Player */}
+            <div className="relative pb-[56.25%] h-0 overflow-hidden">
+              <iframe
+                className="absolute top-0 left-0 w-full h-full"
+                src={`https://www.youtube.com/embed/${demoVideoId}?autoplay=1&mute=0`}
+                title="Fitness Demo Video"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+              ></iframe>
+            </div>
+            
+            {/* Video Title */}
+            <div className="p-6 bg-gradient-to-t from-black/100 to-black/80">
+              <h3 className="text-xl font-bold text-white">FitZone Complete Workout Demonstration</h3>
+              <p className="text-gray-300 mt-2">Watch our expert trainers demonstrate proper technique for maximum results.</p>
+            </div>
+          </div>
+        </div>
+      )}
     </section>
   );
 };
