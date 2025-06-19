@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Dumbbell, Target, Clock, BarChart3, X, Play, CheckCircle, StopCircle, TimerReset, Plus, Folder, FolderPlus, List, Calendar, ArrowLeft } from 'lucide-react';
+import { Dumbbell, Target, Clock, BarChart3, X, Play, CheckCircle, StopCircle, TimerReset, Plus, Folder, FolderPlus, List, Calendar, ArrowLeft, ChevronDown } from 'lucide-react';
 
 // Define types
 interface Exercise {
@@ -34,6 +34,10 @@ const Exercises = () => {
   const [time, setTime] = useState(0);
   const [isWorkoutStarted, setIsWorkoutStarted] = useState(false);
   
+  // Pagination state
+  const [visibleExercises, setVisibleExercises] = useState(4);
+  const exercisesPerPage = 4;
+  
   // Routine management state
   const [routines, setRoutines] = useState<Routine[]>([
     {
@@ -57,6 +61,11 @@ const Exercises = () => {
   });
   const [isRoutineListVisible, setIsRoutineListVisible] = useState(false);
   const [viewingRoutine, setViewingRoutine] = useState<Routine | null>(null);
+
+  // Reset visible exercises when category changes
+  useEffect(() => {
+    setVisibleExercises(exercisesPerPage);
+  }, [selectedCategory]);
 
   // Listen for showRoutines event from navbar
   useEffect(() => {
@@ -114,6 +123,11 @@ const Exercises = () => {
   const resetTimer = () => {
     setTime(0);
     setIsTimerActive(false);
+  };
+
+  // Load more exercises
+  const loadMoreExercises = () => {
+    setVisibleExercises(prev => prev + exercisesPerPage);
   };
 
   // Start a complete workout routine
@@ -227,6 +241,7 @@ const Exercises = () => {
 
   const categories = ['All', 'Chest', 'Back', 'Legs', 'Arms', 'Shoulders', 'Core', 'Cardio'];
 
+  // Add more exercises to demonstrate pagination
   const exercises = [
     {
       id: 1,
@@ -403,12 +418,279 @@ const Exercises = () => {
       restTime: '2 minutes',
       equipment: 'Pull-up bar',
       targetMuscles: ['Lats', 'Rhomboids', 'Biceps', 'Core']
+    },
+    {
+      id: 9,
+      name: 'Lunges',
+      category: 'Legs',
+      difficulty: 'Intermediate',
+      duration: '15 min',
+      calories: 140,
+      image: 'https://images.pexels.com/photos/6456140/pexels-photo-6456140.jpeg?auto=compress&cs=tinysrgb&w=400&h=300&fit=crop',
+      description: 'Improve balance and strengthen legs with lunges.',
+      instructions: [
+        'Stand tall with feet hip-width apart',
+        'Step forward with one leg and lower your hips',
+        'Front knee should form 90-degree angle', 
+        'Back knee should nearly touch the ground',
+        'Push through front heel to return to starting position'
+      ],
+      sets: '3 sets',
+      reps: '10-12 reps per leg',
+      restTime: '60 seconds',
+      equipment: 'None (Bodyweight) or Dumbbells',
+      targetMuscles: ['Quadriceps', 'Hamstrings', 'Glutes', 'Core']
+    },
+    {
+      id: 10,
+      name: 'Bench Press',
+      category: 'Chest',
+      difficulty: 'Intermediate',
+      duration: '18 min',
+      calories: 160,
+      image: 'https://images.pexels.com/photos/3837781/pexels-photo-3837781.jpeg?auto=compress&cs=tinysrgb&w=400&h=300&fit=crop',
+      description: 'Classic chest exercise for building upper body strength.',
+      instructions: [
+        'Lie flat on a bench with feet on the floor',
+        'Grip barbell with hands slightly wider than shoulders',
+        'Lower bar to mid-chest while keeping elbows at 45°',
+        'Press the bar back up to arms length',
+        'Maintain control throughout the movement'
+      ],
+      sets: '4 sets',
+      reps: '8-12 reps',
+      restTime: '90 seconds',
+      equipment: 'Barbell, Bench',
+      targetMuscles: ['Chest', 'Triceps', 'Shoulders']
+    },
+    {
+      id: 11,
+      name: 'Russian Twists',
+      category: 'Core',
+      difficulty: 'Intermediate',
+      duration: '12 min',
+      calories: 100,
+      image: 'https://images.pexels.com/photos/6111616/pexels-photo-6111616.jpeg?auto=compress&cs=tinysrgb&w=400&h=300&fit=crop',
+      description: 'Rotational exercise that targets your obliques and core.',
+      instructions: [
+        'Sit on the floor with knees bent',
+        'Lean back slightly, keeping back straight',
+        'Lift feet slightly off the ground',
+        'Rotate torso side to side, touching floor beside hips',
+        'Add weight for increased difficulty'
+      ],
+      sets: '3 sets',
+      reps: '15-20 reps per side',
+      restTime: '45 seconds',
+      equipment: 'Optional: Weight plate or medicine ball',
+      targetMuscles: ['Obliques', 'Rectus Abdominis', 'Hip Flexors']
+    },
+    {
+      id: 12,
+      name: 'Dumbbell Rows',
+      category: 'Back',
+      difficulty: 'Beginner',
+      duration: '15 min',
+      calories: 120,
+      image: 'https://images.pexels.com/photos/2204196/pexels-photo-2204196.jpeg?auto=compress&cs=tinysrgb&w=400&h=300&fit=crop',
+      description: 'Build a strong back with this fundamental pulling exercise.',
+      instructions: [
+        'Place one knee and hand on a bench',
+        'Hold dumbbell in other hand with arm extended',
+        'Pull weight up toward hip, keeping elbow close to body',
+        'Lower weight with control back to starting position',
+        'Complete reps on one side before switching'
+      ],
+      sets: '3 sets',
+      reps: '10-15 reps per arm',
+      restTime: '60 seconds',
+      equipment: 'Dumbbell, Bench',
+      targetMuscles: ['Latissimus Dorsi', 'Rhomboids', 'Biceps', 'Rear Deltoids']
+    },
+    {
+      id: 13,
+      name: 'Tricep Dips',
+      category: 'Arms',
+      difficulty: 'Beginner',
+      duration: '12 min',
+      calories: 90,
+      image: 'https://images.pexels.com/photos/4720236/pexels-photo-4720236.jpeg?auto=compress&cs=tinysrgb&w=400&h=300&fit=crop',
+      description: 'Effective exercise for targeting the triceps muscles.',
+      instructions: [
+        'Sit on the edge of a bench or chair',
+        'Place hands beside hips, fingers facing forward',
+        'Slide buttocks off the edge and lower body',
+        'Bend elbows to 90 degrees, keeping them pointed back',
+        'Press through palms to return to starting position'
+      ],
+      sets: '3 sets',
+      reps: '10-15 reps',
+      restTime: '60 seconds',
+      equipment: 'Bench or chair',
+      targetMuscles: ['Triceps', 'Shoulders', 'Chest']
+    },
+    {
+      id: 14,
+      name: 'Lateral Raises',
+      category: 'Shoulders',
+      difficulty: 'Beginner',
+      duration: '10 min',
+      calories: 80,
+      image: 'https://images.pexels.com/photos/4498603/pexels-photo-4498603.jpeg?auto=compress&cs=tinysrgb&w=400&h=300&fit=crop',
+      description: 'Isolate and build your shoulder muscles with this targeted exercise.',
+      instructions: [
+        'Stand with feet shoulder-width apart',
+        'Hold dumbbells at sides with palms facing inward',
+        'Keep slight bend in elbows',
+        'Raise arms out to sides until parallel to floor',
+        'Lower slowly to starting position'
+      ],
+      sets: '3 sets',
+      reps: '12-15 reps',
+      restTime: '45 seconds',
+      equipment: 'Dumbbells',
+      targetMuscles: ['Lateral Deltoids', 'Trapezius', 'Rotator Cuff']
+    },
+    {
+      id: 15,
+      name: 'Jump Rope',
+      category: 'Cardio',
+      difficulty: 'Beginner',
+      duration: '15 min',
+      calories: 200,
+      image: 'https://images.pexels.com/photos/2827392/pexels-photo-2827392.jpeg?auto=compress&cs=tinysrgb&w=400&h=300&fit=crop',
+      description: 'Highly effective cardio workout that improves coordination and burns calories.',
+      instructions: [
+        'Hold rope handles with a relaxed grip',
+        'Keep elbows close to sides',
+        'Make small circles with wrists to swing rope',
+        'Jump just high enough to clear the rope',
+        'Land softly on balls of feet'
+      ],
+      sets: '3 sets',
+      reps: '1-2 minutes per set',
+      restTime: '60 seconds',
+      equipment: 'Jump rope',
+      targetMuscles: ['Calves', 'Shoulders', 'Arms', 'Core']
+    },
+    {
+      id: 16,
+      name: 'Leg Press',
+      category: 'Legs',
+      difficulty: 'Intermediate',
+      duration: '20 min',
+      calories: 160,
+      image: 'https://images.pexels.com/photos/136404/pexels-photo-136404.jpeg?auto=compress&cs=tinysrgb&w=400&h=300&fit=crop',
+      description: 'Build powerful legs using the leg press machine.',
+      instructions: [
+        'Sit on leg press machine with back against pad',
+        'Place feet shoulder-width apart on platform',
+        'Release safety locks and lower weight slowly',
+        'Lower until knees form 90-degree angles',
+        'Press through heels to extend legs (don\'t lock knees)'
+      ],
+      sets: '4 sets',
+      reps: '10-12 reps',
+      restTime: '90 seconds',
+      equipment: 'Leg press machine',
+      targetMuscles: ['Quadriceps', 'Hamstrings', 'Glutes']
+    },
+    {
+      id: 17,
+      name: 'Mountain Climbers',
+      category: 'Core',
+      difficulty: 'Intermediate',
+      duration: '10 min',
+      calories: 120,
+      image: 'https://images.pexels.com/photos/6389355/pexels-photo-6389355.jpeg?auto=compress&cs=tinysrgb&w=400&h=300&fit=crop',
+      description: 'Dynamic exercise that works your core while providing cardiovascular benefits.',
+      instructions: [
+        'Start in a high plank position',
+        'Keep shoulders directly over wrists',
+        'Drive one knee toward chest, then quickly switch legs',
+        'Maintain flat back and engaged core',
+        'Continue alternating at a fast pace'
+      ],
+      sets: '3 sets',
+      reps: '30-60 seconds',
+      restTime: '45 seconds',
+      equipment: 'None (Bodyweight)',
+      targetMuscles: ['Core', 'Shoulders', 'Hip Flexors', 'Quads']
+    },
+    {
+      id: 18,
+      name: 'Cable Crossovers',
+      category: 'Chest',
+      difficulty: 'Advanced',
+      duration: '15 min',
+      calories: 120,
+      image: 'https://images.pexels.com/photos/7690058/pexels-photo-7690058.jpeg?auto=compress&cs=tinysrgb&w=400&h=300&fit=crop',
+      description: 'Excellent isolation exercise for defining and shaping the chest muscles.',
+      instructions: [
+        'Stand between cable machines with handles at shoulder height',
+        'Step forward slightly with one foot for stability',
+        'Start with arms extended out to sides',
+        'Pull handles down and across body in arcing motion',
+        'Squeeze chest at end position before returning to start'
+      ],
+      sets: '3 sets',
+      reps: '12-15 reps',
+      restTime: '60 seconds',
+      equipment: 'Cable machine',
+      targetMuscles: ['Chest', 'Anterior Deltoids', 'Serratus Anterior']
+    },
+    {
+      id: 19,
+      name: 'Hammer Curls',
+      category: 'Arms',
+      difficulty: 'Beginner',
+      duration: '12 min',
+      calories: 90,
+      image: 'https://images.pexels.com/photos/6550823/pexels-photo-6550823.jpeg?auto=compress&cs=tinysrgb&w=400&h=300&fit=crop',
+      description: 'Targets the biceps and forearms for balanced arm development.',
+      instructions: [
+        'Stand with feet shoulder-width apart holding dumbbells',
+        'Keep palms facing inward toward body (neutral grip)',
+        'Keep elbows close to sides throughout movement',
+        'Curl weights upward while keeping wrists straight',
+        'Lower weights slowly to starting position'
+      ],
+      sets: '3 sets',
+      reps: '10-15 reps',
+      restTime: '60 seconds',
+      equipment: 'Dumbbells',
+      targetMuscles: ['Biceps', 'Brachialis', 'Forearms']
+    },
+    {
+      id: 20,
+      name: 'Face Pulls',
+      category: 'Shoulders',
+      difficulty: 'Intermediate',
+      duration: '15 min',
+      calories: 100,
+      image: 'https://images.pexels.com/photos/4164765/pexels-photo-4164765.jpeg?auto=compress&cs=tinysrgb&w=400&h=300&fit=crop',
+      description: 'Great exercise for rear deltoids and improving shoulder health.',
+      instructions: [
+        'Set cable pulley to head height with rope attachment',
+        'Grasp rope with both hands, palms facing in',
+        'Step back to create tension in cable',
+        'Pull rope toward face, separating hands as you pull',
+        'Squeeze shoulder blades together at end of movement'
+      ],
+      sets: '3 sets',
+      reps: '12-15 reps',
+      restTime: '60 seconds',
+      equipment: 'Cable machine with rope attachment',
+      targetMuscles: ['Rear Deltoids', 'Middle Trapezius', 'Rhomboids', 'Rotator Cuff']
     }
   ];
 
   const filteredExercises = selectedCategory === 'All' 
     ? exercises 
     : exercises.filter(exercise => exercise.category === selectedCategory);
+
+  const visibleExercisesList = filteredExercises.slice(0, visibleExercises);
+  const hasMoreExercises = visibleExercises < filteredExercises.length;
 
   const getDifficultyColor = (difficulty: string) => {
     switch (difficulty) {
@@ -601,7 +883,7 @@ const Exercises = () => {
 
         {/* Exercise Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-          {filteredExercises.map((exercise) => (
+          {visibleExercisesList.map((exercise) => (
             <div
               key={exercise.id}
               className="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden group hover:scale-105"
@@ -651,11 +933,20 @@ const Exercises = () => {
         </div>
 
         {/* Load More Button */}
-        <div className="text-center mt-12">
-          <button className="bg-white text-gray-700 px-8 py-4 rounded-full font-medium shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-200 border border-gray-200">
-            Load More Exercises
-          </button>
-        </div>
+        {hasMoreExercises && (
+          <div className="text-center mt-12">
+            <button 
+              onClick={loadMoreExercises}
+              className="bg-white text-gray-700 px-8 py-4 rounded-full font-medium shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-200 border border-gray-200 flex items-center gap-2 mx-auto"
+            >
+              Load More Exercises
+              <ChevronDown className="h-5 w-5" />
+            </button>
+            <p className="mt-2 text-sm text-gray-500">
+              Showing {visibleExercisesList.length} of {filteredExercises.length} exercises
+            </p>
+          </div>
+        )}
       </div>
 
       {/* Exercise Modal */}
