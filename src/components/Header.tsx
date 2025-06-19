@@ -22,6 +22,15 @@ const Header = () => {
     { name: 'Contact', href: '#contact' }
   ];
 
+  // Function to scroll to exercises section
+  const scrollToExercises = () => {
+    const exercisesSection = document.getElementById('exercises');
+    if (exercisesSection) {
+      exercisesSection.scrollIntoView({ behavior: 'smooth' });
+    }
+    setIsMenuOpen(false); // Close mobile menu if open
+  };
+
   return (
     <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
       isScrolled ? 'bg-white/95 backdrop-blur-md shadow-lg' : 'bg-transparent'
@@ -67,9 +76,13 @@ const Header = () => {
               <Folder className="h-4 w-4" />
               My Routines
             </a>
-            <button className="bg-gradient-to-r from-blue-600 to-orange-600 text-white px-6 py-2 rounded-full font-medium hover:shadow-lg hover:scale-105 transition-all duration-200">
+            <a 
+              href="#exercises"
+              onClick={scrollToExercises}
+              className="bg-gradient-to-r from-blue-600 to-orange-600 text-white px-6 py-2 rounded-full font-medium hover:shadow-lg hover:scale-105 transition-all duration-200"
+            >
               Get Started
-            </button>
+            </a>
           </nav>
 
           {/* Mobile Menu Button */}
@@ -108,9 +121,13 @@ const Header = () => {
                 <Folder className="h-4 w-4" />
                 My Routines
               </a>
-              <button className="w-full bg-gradient-to-r from-blue-600 to-orange-600 text-white px-6 py-3 rounded-full font-medium hover:shadow-lg transition-all duration-200">
+              <a 
+                href="#exercises"
+                onClick={scrollToExercises}
+                className="block w-full text-center bg-gradient-to-r from-blue-600 to-orange-600 text-white px-6 py-3 rounded-full font-medium hover:shadow-lg transition-all duration-200"
+              >
                 Get Started
-              </button>
+              </a>
             </nav>
           </div>
         )}
